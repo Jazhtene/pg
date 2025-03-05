@@ -1,0 +1,81 @@
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15) UNIQUE NOT NULL
+);
+
+CREATE TABLE Teachers (
+    teacher_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    department VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    Units INT NOT NULL,
+    teacher_id INT NOT NULL,
+    FOREIGN KEY (teacher_id) REFERENCES Teachers(teacher_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Enrollments (
+    enrollment_id INT PRIMARY KEY,
+    student_id INT NOT NULL,
+    course_id INT NOT NULL,
+    date_enrolled DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (student_id) REFERENCES Students(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Payments (
+    payment_id INT PRIMARY KEY,
+    student_id INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    payment_date DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (student_id) REFERENCES Students(student_id) ON DELETE CASCADE
+);
+
+INSERT INTO Students (student_id, name, email, phone) VALUES
+(2023304852, 'Jazhtene Orale', 'Jazh@gmail.com', '1234567890'),
+(2022310026, 'Keneth Navasca', 'ken@gmail.com', '0987654321'),
+(2023304752, 'Riza Tual', 'Riz@gmail.com', '1112223333'),
+(2023305209, 'Alwina Bacaling', 'Bac@gmail.com', '4445556666'),
+(2023305323, 'Frisel Lagani', 'Lag@gmail.com', '7778889999');
+
+INSERT INTO Teachers (teacher_id, name, department) VALUES
+(1, 'MR. Ray An Quinon', 'Information Management'),
+(2, 'Mr. Arnel MAngga', 'Networking'),
+(3, 'Mr. Kilven Mark Badiang', 'Web Systeme and Techolgies'),
+(4, 'Ms. Marites Habagat', 'System Integration and Architecture'),
+(5, 'Corazon Badiang', 'The Life and Works of Rizal');
+
+INSERT INTO Courses (course_id, course_name, Units, teacher_id) VALUES
+(11, 'Information Management', 3, 1),
+(21, 'Networking', 4, 2),
+(31, 'Web Systeme and Techolgies', 3, 3),
+(41, 'System Integration and Architecture', 3, 4),
+(51, 'The Life and Works of Rizal', 3, 5);
+
+
+INSERT INTO Enrollments (enrollment_id, student_id, course_id) VALUES
+(13, 2023304852, 11), (23, 2022310026, 21), (33, 2023304752, 31), (43, 2023305209, 41), (53, 2023305323, 51);
+
+INSERT INTO Payments (payment_id, student_id, amount) VALUES
+(31, 2023304852, 1500.00), (32, 2022310026, 2000.00), (33, 2023304752, 1700.00), (34, 2023305209, 1600.00), (35, 2023305323, 1800.00);
+
+SELECT * FROM Students;
+SELECT * FROM Teachers;
+SELECT * FROM Courses;
+SELECT * FROM Enrollments;
+SELECT * FROM Payments;
+
+
+SELECT Enrollments.enrollment_id,payments.amount
+FROM Enrollments
+left JOIN payments ON Enrollments.student_id = payments.student_id;
+
+ 
+SELECT Teachers.name,Courses.course_name
+FROM  Courses
+CROSS JOIN Teachers;
